@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { api } from "../../../utils/api";
-import Navbar from "../../components/Navbar";
+import Navbar from "../components/Navbar";
 import {
   format,
   startOfMonth,

@@ -4,7 +4,7 @@
 import dynamic from 'next/dynamic';
 import { Suspense } from 'react';
 
-const CreateBookingForm = dynamic(() => import('../../components/CreateBookingForm'), {
+const CreateBookingForm = dynamic(() => import('../../components/createBookingForm'), {
   ssr: false,
 });
 
