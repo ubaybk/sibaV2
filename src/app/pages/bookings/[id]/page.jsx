@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { api } from "../../../../utils/api";
-import Navbar from "../../../components/Navbar";
+import Navbar from "../../../components/navbar";
 
 export default function BookingDetail() {
   const params = useParams();

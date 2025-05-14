@@ -2,8 +2,8 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { api } from "../../../utils/api";
-import Navbar from "../../components/Navbar";
-import BookingCard from "../../components/BookingCard";
+import Navbar from "../../components/navbar";
+import BookingCard from "../../components/bookingCard";
 
 // Fungsi bantu untuk decode JWT jika role disimpan di payload token
 const getRoleFromToken = (token) => {
