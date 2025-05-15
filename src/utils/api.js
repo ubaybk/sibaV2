@@ -3,7 +3,7 @@
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 
-const API_URL = "http://puskesmascilandak.jakarta.go.id/sibav2BE";
+const API_URL = "https://puskesmascilandak.jakarta.go.id/sibav2BE";
 
 // Buat instance axios
 export const api = axios.create({
