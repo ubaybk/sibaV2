@@ -3,7 +3,7 @@
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 
-const API_URL = "https://puskesmascilandak.jakarta.go.id/sibav2BE";
+const API_URL = "http://puskesmascilandak.jakarta.go.id/sibav2BE";
 
 // Buat instance axios
 export const api = axios.create({
@@ -54,7 +54,7 @@ api.interceptors.response.use(
       // Sementara kita redirect ke login
       localStorage.removeItem("token");
       localStorage.removeItem("refreshToken");
-      window.location.href = "/login";
+      window.location.href = "/pages/login";
       return Promise.reject(new Error("Sesi habis. Silakan login kembali."));
     }
 
