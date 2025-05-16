@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { api } from "../../utils/api";
 import Navbar from "./navbar";
+import { toast, ToastContainer } from "react-toastify"; // 🔥 Tambahkan import
+import "react-toastify/dist/ReactToastify.css"; // CSS Toastify
 
 export default function CreateBookingForm() {
   const searchParams = useSearchParams();
@@ -20,7 +22,6 @@ export default function CreateBookingForm() {
   });
   const [rooms, setRooms] = useState([]);
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
@@ -48,6 +49,7 @@ export default function CreateBookingForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+
     try {
       if (
         !formData.roomId ||
@@ -76,18 +78,37 @@ export default function CreateBookingForm() {
       };
 
       await api.post("/api/bookings", formattedData);
-      setSuccess(true);
+
+      // 🔥 Tampilkan toast sukses
+      toast.success("✅ Booking created successfully!", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
 
       setTimeout(() => {
         router.push("/pages/dashboard");
-      }, 2000);
+      }, 2000); // Redirect setelah 2 detik agar user bisa lihat toast
+
     } catch (err) {
       console.error(err);
+      let errorMessage = "Error creating booking. Please try again.";
+
       if (err.response && err.response.data && err.response.data.message) {
-        setError(err.response.data.message);
-      } else {
-        setError(err.message || "Error creating booking. Please try again.");
+        errorMessage = err.response.data.message;
+      } else if (err.message) {
+        errorMessage = err.message;
       }
+
+      setError(errorMessage);
+
+      // 🔥 Tampilkan toast error jika gagal
+      toast.error("❌ Failed to create booking.", {
+        autoClose: 5000,
+      });
     } finally {
       setLoading(false);
     }
@@ -103,17 +124,16 @@ export default function CreateBookingForm() {
             <p className="text-purple-200 mt-2">Fill in the details to book a room</p>
           </div>
           <div className="p-8">
-            {success && (
-              <div className="mb-6 bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded">
-                <p className="font-medium">Booking created successfully! Redirecting...</p>
-              </div>
-            )}
+            {/* Notifikasi Error */}
             {error && (
               <div className="mb-6 bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded">
                 <p className="font-medium">{error}</p>
               </div>
             )}
+
+            {/* Form Booking */}
             <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Room Name & Participant Count */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Room Name</label>
@@ -145,6 +165,8 @@ export default function CreateBookingForm() {
                   />
                 </div>
               </div>
+
+              {/* Start Date & End Date */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Start Date</label>
@@ -169,6 +191,8 @@ export default function CreateBookingForm() {
                   />
                 </div>
               </div>
+
+              {/* Start Time & End Time */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Start Time</label>
@@ -193,6 +217,8 @@ export default function CreateBookingForm() {
                   />
                 </div>
               </div>
+
+              {/* Event Name */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Event Name</label>
                 <input
@@ -205,6 +231,8 @@ export default function CreateBookingForm() {
                   required
                 />
               </div>
+
+              {/* Description */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
                 <textarea
@@ -217,6 +245,8 @@ export default function CreateBookingForm() {
                   required
                 ></textarea>
               </div>
+
+              {/* Penanggung Jawab */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Penanggung Jawab</label>
                 <input
@@ -229,6 +259,8 @@ export default function CreateBookingForm() {
                   required
                 />
               </div>
+
+              {/* Submit Button */}
               <div className="pt-4">
                 <button
                   type="submit"
@@ -248,6 +280,8 @@ export default function CreateBookingForm() {
                   )}
                 </button>
               </div>
+
+              {/* Cancel Button */}
               <div className="text-center mt-4">
                 <button
                   type="button"
@@ -261,6 +295,9 @@ export default function CreateBookingForm() {
           </div>
         </div>
       </div>
+
+      {/* 🔥 Tempatkan ToastContainer di akhir agar toast bisa tampil */}
+      <ToastContainer />
     </div>
   );
 }
