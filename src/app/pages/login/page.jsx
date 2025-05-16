@@ -1,53 +1,44 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { IoArrowBackCircleSharp } from "react-icons/io5";
+import { IoArrowBackCircleSharp, IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 import { api } from "../../../utils/api";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false); // State untuk toggle password
   const router = useRouter();
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-  
+
     try {
       const response = await api.post("/api/auth/login", { email, password });
-  
-      console.log("Respons dari API:", response);
-  
+
       if (!response.data || !response.data.token) {
         setError("Token tidak diterima dari server");
         return;
       }
-  
+
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("user", JSON.stringify(response.data.user));
-  
-      router.push("/pages/dashboard");
-  
-    } catch (err) {
-  console.error("Error login:", err);
 
-  if (err.response) {
-    // Jika server memberikan respons dengan status tertentu
-    if (err.response.status === 401) {
-      setError("Username atau password salah");
-    } else if (err.response.data?.message) {
-      setError(err.response.data.message);
-    } else {
-      setError("Terjadi kesalahan saat login.");
+      router.push("/pages/dashboard");
+
+    } catch (err) {
+      console.error("Error login:", err);
+
+      if (err.response?.data?.message) {
+        setError(err.response.data.message);
+      } else if (err.request) {
+        setError("Server tidak merespons. Cek backend.");
+      } else {
+        setError("Terjadi kesalahan saat login.");
+      }
     }
-  } else if (err.request) {
-    setError("Server tidak merespons. Cek backend.");
-  } else {
-    setError("Terjadi kesalahan saat memproses permintaan.");
-  }
-}
   };
 
   return (
@@ -57,6 +48,7 @@ export default function Login() {
       <button
         onClick={() => router.back()}
         className="self-start text-white text-3xl mb-4 hover:scale-95 transition-transform text-[50px] hover:text-purple-200 cursor-pointer"
+        aria-label="Kembali"
       >
         <IoArrowBackCircleSharp />
       </button>
@@ -85,16 +77,24 @@ export default function Login() {
           />
         </div>
 
-        {/* Password */}
-        <div className="mt-4">
+        {/* Password dengan Toggle */}
+        <div className="mt-4 relative">
           <label className="block text-sm font-medium">Password</label>
           <input
-            type="password"
+            type={showPassword ? "text" : "password"}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="w-full px-3 py-2 mt-1 border rounded-md focus:ring-purple-500 focus:border-purple-500"
             required
           />
+          <button
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            className="absolute right-3 top-9 text-gray-500 hover:text-gray-700"
+            aria-label={showPassword ? "Sembunyikan password" : "Tampilkan password"}
+          >
+            {showPassword ? <IoEyeOffOutline size={20} /> : <IoEyeOutline size={20} />}
+          </button>
         </div>
 
         {/* Tombol Login */}
