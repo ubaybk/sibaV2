@@ -97,7 +97,7 @@ export default function BookingDetail() {
 
       console.log("Updating booking with data:", formData); // Debugging
       await api.put(`/api/bookings/${id}`, formData);
-      router.push("/pages/dashboard");
+      router.push("/pages/bookings");
     } catch (err) {
       console.error("Update Error:", err); // Debugging
 
