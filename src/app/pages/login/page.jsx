@@ -10,17 +10,6 @@ export default function Login() {
   const [error, setError] = useState("");
   const router = useRouter();
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     const response = await api.post("/api/auth/login", { email, password });
-  //     localStorage.setItem("token", response.data.token);
-  //     localStorage.setItem("user", JSON.stringify(response.data.user));
-  //     router.push("/pages/dashboard");
-  //   } catch (err) {
-  //     setError("Invalid credentials");
-  //   }
-  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -42,16 +31,23 @@ export default function Login() {
       router.push("/pages/dashboard");
   
     } catch (err) {
-      console.error("Error login:", err);
-  
-      if (err.response?.data?.message) {
-        setError(err.response.data.message);
-      } else if (err.request) {
-        setError("Server tidak merespons. Cek backend.");
-      } else {
-        setError("Terjadi kesalahan saat login.");
-      }
+  console.error("Error login:", err);
+
+  if (err.response) {
+    // Jika server memberikan respons dengan status tertentu
+    if (err.response.status === 401) {
+      setError("Username atau password salah");
+    } else if (err.response.data?.message) {
+      setError(err.response.data.message);
+    } else {
+      setError("Terjadi kesalahan saat login.");
     }
+  } else if (err.request) {
+    setError("Server tidak merespons. Cek backend.");
+  } else {
+    setError("Terjadi kesalahan saat memproses permintaan.");
+  }
+}
   };
 
   return (
