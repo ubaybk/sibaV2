@@ -79,7 +79,7 @@ export default function CreateBookingForm() {
       setSuccess(true);
 
       setTimeout(() => {
-        router.push("/pages/bookings");
+        router.push("/pages/dashboard");
       }, 2000);
     } catch (err) {
       console.error(err);
