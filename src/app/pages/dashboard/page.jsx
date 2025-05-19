@@ -344,29 +344,37 @@ export default function Dashboard() {
                       {/* Show fullbooked indicator */}
    {hasFullBookedRooms && (
   (() => {
-    // Filter zoom meeting rooms dan full booked zoom rooms
-    const zoomRooms = rooms.filter(r => r.type === 'ZOOM MEETING');
-    const zoomFullBooked = fullBookedRooms.filter(fb =>
-      zoomRooms.some(zr => zr.name === fb)
+    // Hitung jumlah ruang selain ZOOM MEETING
+    const nonZoomRooms = rooms.filter(r => r.type !== 'ZOOM MEETING');
+    const nonZoomFullBooked = fullBookedRooms.filter(roomName =>
+      rooms.some(r => r.name === roomName && r.type !== 'ZOOM MEETING')
     );
 
-    const isZoomFull = zoomFullBooked.length === zoomRooms.length && zoomRooms.length > 0;
+    // Hitung apakah semua ZOOM MEETING sudah full
+    const zoomRooms = rooms.filter(r => r.type === 'ZOOM MEETING');
+    const zoomFullBooked = fullBookedRooms.filter(roomName =>
+      zoomRooms.some(r => r.name === roomName)
+    );
+    const isZoomFull = zoomRooms.length > 0 && zoomFullBooked.length === zoomRooms.length;
+
+    // Tentukan status pesan utama
+    let mainMessage = '';
+    let bgColorClass = 'bg-red-100 text-red-700';
+
+    if (fullBookedRooms.length === rooms.length) {
+      mainMessage = 'Fully booked';
+      bgColorClass = 'bg-red-100 text-red-700';
+    } else if (nonZoomRooms.length - nonZoomFullBooked.length === 1) {
+      mainMessage = '1 room left';
+      bgColorClass = 'bg-yellow-100 text-yellow-700';
+    } else {
+      mainMessage = `${fullBookedRooms.length} fullbooked`;
+      bgColorClass = 'bg-red-100 text-red-700';
+    }
 
     return (
-      <div
-        className={`mt-1 text-xs px-1 py-0.5 rounded ${
-          fullBookedRooms.length === rooms.length
-            ? 'bg-red-100 text-red-700'
-            : rooms.length - fullBookedRooms.length === 1
-            ? 'bg-yellow-100 text-yellow-700'
-            : 'bg-red-100 text-red-700'
-        }`}
-      >
-        {fullBookedRooms.length === rooms.length
-          ? 'Fully booked'
-          : rooms.length - fullBookedRooms.length === 1
-          ? '1 room left'
-          : `${fullBookedRooms.length} fullbooked`}
+      <div className={`mt-1 text-xs px-1 py-0.5 rounded ${bgColorClass}`}>
+        {mainMessage}
         {isZoomFull && <span className="ml-1 font-semibold">- Zoom Meeting Full Booked</span>}
       </div>
     );
