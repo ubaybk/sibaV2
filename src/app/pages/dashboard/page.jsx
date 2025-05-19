@@ -363,12 +363,12 @@ export default function Dashboard() {
 {hasFullBookedRooms && (
   <div className="mt-1 flex flex-wrap gap-1">
     {fullBookedRooms.map((roomName) => (
-      <span
-        key={roomName}
-        className="px-1.5 py-0.5 rounded text-[10px] font-medium bg-red-100 text-red-700"
-      >
-        {roomName}
-      </span>
+     <span
+  key={roomName}
+  className="px-1 py-0.5 text-[8px] leading-none font-medium rounded bg-red-100 text-red-700 whitespace-nowrap"
+>
+  {roomName}
+</span>
     ))}
   </div>
 )}
