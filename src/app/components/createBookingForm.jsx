@@ -4,6 +4,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { api } from "../../utils/api";
 import Navbar from "./navbar";
 import { toast, ToastContainer } from "react-toastify";
+import { isSameDay, eachDayOfInterval } from 'date-fns';
 import "react-toastify/dist/ReactToastify.css";
 
 export default function CreateBookingForm() {
