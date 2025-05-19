@@ -356,19 +356,39 @@ export default function Dashboard() {
       nonZoomRooms.some(nr => nr.name === roomName)
     );
 
-    let mainMessage = '';
-    let bgColorClass = 'bg-red-100 text-red-700';
+   let mainMessage = '';
+let bgColorClass = 'bg-red-100 text-red-700';
 
-    if (fullBookedRooms.length === rooms.length) {
-      mainMessage = 'Fully booked';
-    } else if (isZoomFull) {
-      mainMessage = 'Zoom Meeting Full Booked';
-    } else if (nonZoomRooms.length - nonZoomFullBooked.length === 1) {
-      mainMessage = '1 room left';
-      bgColorClass = 'bg-yellow-100 text-yellow-700';
-    } else {
-      mainMessage = `${nonZoomFullBooked.length} fullbooked`;
-    }
+// Jika semua ruang (termasuk zoom meeting) full
+if (fullBookedRooms.length === rooms.length) {
+  mainMessage = 'Fully booked';
+}
+
+// Jika semua ZOOM MEETING full tapi masih ada ruang lain tersisa
+else if (isZoomFull && nonZoomFullBooked.length > 0) {
+  mainMessage = `Zoom Meeting Full Booked + ${nonZoomFullBooked.length} fullbooked`;
+}
+
+// Jika semua ZOOM MEETING full TAPI belum semua ruang full
+else if (isZoomFull) {
+  mainMessage = 'Zoom Meeting Full Booked';
+}
+
+// Hanya ada beberapa ruang non-zoom yang full
+else if (nonZoomFullBooked.length > 0) {
+  mainMessage = `${nonZoomFullBooked.length} fullbooked`;
+}
+
+// Hanya tersisa 1 ruang non-zoom
+else if (nonZoomRooms.length - nonZoomFullBooked.length === 1) {
+  mainMessage = '1 room left';
+  bgColorClass = 'bg-yellow-100 text-yellow-700';
+}
+
+// Default tidak ada fullbooked
+else {
+  mainMessage = '';
+}
 
     return (
       <div className={`mt-1 text-xs px-1 py-0.5 rounded ${bgColorClass}`}>
