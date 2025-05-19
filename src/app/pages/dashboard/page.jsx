@@ -365,7 +365,7 @@ export default function Dashboard() {
     {fullBookedRooms.map((roomName) => (
       <span
         key={roomName}
-        className="px-2 py-1 rounded-md bg-red-100 text-red-700 text-xs font-medium"
+        className="px-1.5 py-0.5 rounded text-[10px] font-medium bg-red-100 text-red-700"
       >
         {roomName}
       </span>
