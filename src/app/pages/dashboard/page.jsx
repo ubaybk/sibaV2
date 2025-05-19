@@ -342,22 +342,35 @@ export default function Dashboard() {
                       )} */}
                       
                       {/* Show fullbooked indicator */}
-                      {hasFullBookedRooms && (
-  <div
-    className={`mt-1 text-xs px-1 py-0.5 rounded ${
-      fullBookedRooms.length === rooms.length
-        ? 'bg-red-100 text-red-700'
-        : rooms.length - fullBookedRooms.length === 1
-        ? 'bg-yellow-100 text-yellow-700'
-        : 'bg-red-100 text-red-700'
-    }`}
-  >
-    {fullBookedRooms.length === rooms.length
-      ? 'Fully booked'
-      : rooms.length - fullBookedRooms.length === 1
-      ? '1 room left'
-      : `${fullBookedRooms.length} fullbooked`}
-  </div>
+   {hasFullBookedRooms && (
+  (() => {
+    // Filter zoom meeting rooms dan full booked zoom rooms
+    const zoomRooms = rooms.filter(r => r.type === 'ZOOM MEETING');
+    const zoomFullBooked = fullBookedRooms.filter(fb =>
+      zoomRooms.some(zr => zr.name === fb)
+    );
+
+    const isZoomFull = zoomFullBooked.length === zoomRooms.length && zoomRooms.length > 0;
+
+    return (
+      <div
+        className={`mt-1 text-xs px-1 py-0.5 rounded ${
+          fullBookedRooms.length === rooms.length
+            ? 'bg-red-100 text-red-700'
+            : rooms.length - fullBookedRooms.length === 1
+            ? 'bg-yellow-100 text-yellow-700'
+            : 'bg-red-100 text-red-700'
+        }`}
+      >
+        {fullBookedRooms.length === rooms.length
+          ? 'Fully booked'
+          : rooms.length - fullBookedRooms.length === 1
+          ? '1 room left'
+          : `${fullBookedRooms.length} fullbooked`}
+        {isZoomFull && <span className="ml-1 font-semibold">- Zoom Meeting Full Booked</span>}
+      </div>
+    );
+  })()
 )}
 
                     </div>
