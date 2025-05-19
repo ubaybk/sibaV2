@@ -342,53 +342,51 @@ export default function Dashboard() {
                       )} */}
                       
                       {/* Show fullbooked indicator */}
- {hasFullBookedRooms && (
+                      {/* {hasFullBookedRooms && (
+  <div
+    className={`mt-1 text-xs px-1 py-0.5 rounded ${
+      fullBookedRooms.length === rooms.length
+        ? 'bg-red-100 text-red-700'
+        : rooms.length - fullBookedRooms.length === 1
+        ? 'bg-yellow-100 text-yellow-700'
+        : 'bg-red-100 text-red-700'
+    }`}
+  >
+    {fullBookedRooms.length === rooms.length
+      ? 'Fully booked'
+      : rooms.length - fullBookedRooms.length === 1
+      ? '1 room left'
+      : `${fullBookedRooms.length} fullbooked`}
+  </div>
+)} */}
+
+{hasFullBookedRooms && (
   (() => {
-    // Filter room dan full booked berdasarkan tipe
-    const zoomRooms = rooms.filter(r => r.type === 'ZOOM MEETING');
+    // DETEKSI ROOM ZOOM MEETING BERDASARKAN NAMA
+    const zoomRooms = rooms.filter(r => r.name === 'ZOOM MEETING');
     const zoomFullBooked = fullBookedRooms.filter(roomName =>
       zoomRooms.some(zr => zr.name === roomName)
     );
-
     const isZoomFull = zoomRooms.length > 0 && zoomFullBooked.length === zoomRooms.length;
-    const nonZoomRooms = rooms.filter(r => r.type !== 'ZOOM MEETING');
+
+    const nonZoomRooms = rooms.filter(r => r.name !== 'ZOOM MEETING');
     const nonZoomFullBooked = fullBookedRooms.filter(roomName =>
       nonZoomRooms.some(nr => nr.name === roomName)
     );
 
-   let mainMessage = '';
-let bgColorClass = 'bg-red-100 text-red-700';
+    let mainMessage = '';
+    let bgColorClass = 'bg-red-100 text-red-700';
 
-// Jika semua ruang (termasuk zoom meeting) full
-if (fullBookedRooms.length === rooms.length) {
-  mainMessage = 'Fully booked';
-}
-
-// Jika semua ZOOM MEETING full tapi masih ada ruang lain tersisa
-else if (isZoomFull && nonZoomFullBooked.length > 0) {
-  mainMessage = `Zoom Meeting Full Booked + ${nonZoomFullBooked.length} fullbooked`;
-}
-
-// Jika semua ZOOM MEETING full TAPI belum semua ruang full
-else if (isZoomFull) {
-  mainMessage = 'Zoom Meeting Full Booked';
-}
-
-// Hanya ada beberapa ruang non-zoom yang full
-else if (nonZoomFullBooked.length > 0) {
-  mainMessage = `${nonZoomFullBooked.length} fullbooked`;
-}
-
-// Hanya tersisa 1 ruang non-zoom
-else if (nonZoomRooms.length - nonZoomFullBooked.length === 1) {
-  mainMessage = '1 room left';
-  bgColorClass = 'bg-yellow-100 text-yellow-700';
-}
-
-// Default tidak ada fullbooked
-else {
-  mainMessage = '';
-}
+    if (fullBookedRooms.length === rooms.length) {
+      mainMessage = 'Fully booked';
+    } else if (isZoomFull) {
+      mainMessage = 'Zoom Meeting Full Booked';
+    } else if (nonZoomRooms.length - nonZoomFullBooked.length === 1) {
+      mainMessage = '1 room left';
+      bgColorClass = 'bg-yellow-100 text-yellow-700';
+    } else if (nonZoomFullBooked.length > 0) {
+      mainMessage = `${nonZoomFullBooked.length} fullbooked`;
+    }
 
     return (
       <div className={`mt-1 text-xs px-1 py-0.5 rounded ${bgColorClass}`}>
