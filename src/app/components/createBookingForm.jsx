@@ -1,11 +1,10 @@
-// components/CreateBookingForm.tsx
 "use client";
 import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { api } from "../../utils/api";
 import Navbar from "./navbar";
-import { toast, ToastContainer } from "react-toastify"; // 🔥 Tambahkan import
-import "react-toastify/dist/ReactToastify.css"; // CSS Toastify
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function CreateBookingForm() {
   const searchParams = useSearchParams();
@@ -21,25 +20,109 @@ export default function CreateBookingForm() {
     penanggungJawab: ""
   });
   const [rooms, setRooms] = useState([]);
+  const [filteredRooms, setFilteredRooms] = useState([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
+  // Fungsi untuk mengecek apakah hari Sabtu/Minggu
+  const isWeekend = (dateString) => {
+    const date = new Date(dateString);
+    const day = date.getDay();
+    return day === 0 || day === 6;
+  };
+
+  // Fungsi untuk menghitung durasi booking per ruangan
+  const getFullBookedRoomsForDay = (bookings, day, allRooms) => {
+    if (!bookings || !Array.isArray(bookings)) return [];
+
+    const dayBookings = bookings.filter((booking) => {
+      const bookingDates = getDatesInRange(booking.startDate, booking.endDate);
+      return bookingDates.some((d) => isSameDay(d, new Date(day)));
+    });
+
+    const roomDurations = {};
+    dayBookings.forEach((booking) => {
+      if (!booking.startTime || !booking.endTime || !booking.room?.name) return;
+      const start = parseInt(booking.startTime.split(":")[0], 10);
+      const end = parseInt(booking.endTime.split(":")[0], 10);
+      const duration = end - start;
+      if (!roomDurations[booking.room.name]) {
+        roomDurations[booking.room.name] = 0;
+      }
+      roomDurations[booking.room.name] += duration;
+    });
+
+    return Object.entries(roomDurations)
+      .filter(([_, totalHours]) => totalHours >= 7)
+      .map(([roomName]) => roomName);
+  };
+
+  // Helper: ambil semua tanggal di antara startDate dan endDate
+  const getDatesInRange = (startDate, endDate) => {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    const dates = [];
+    let currentDate = start;
+
+    while (currentDate <= end) {
+      dates.push(new Date(currentDate));
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+
+    return dates;
+  };
+
+  // Fetch semua room dan filter yang tidak full booked
   useEffect(() => {
     const fetchRooms = async () => {
       try {
         setLoading(true);
-        const response = await api.get("/api/rooms");
-        setRooms(response.data.rooms);
+        const response = await api.get("/api/bookings");
+        const allBookings = response.data || [];
+
+        const roomsResponse = await api.get("/api/rooms/");
+        const allRooms = roomsResponse.data.rooms || [];
+
+        // Ambil semua booking yang relevan
+        const relevantBookings = allBookings.filter(booking => {
+          if (!booking.startDate || !formData.startDate) return false;
+          const bookingStartDate = new Date(booking.startDate);
+          const selectedDate = new Date(formData.startDate);
+          return (
+            isSameDay(bookingStartDate, selectedDate) ||
+            (new Date(booking.startDate) <= selectedDate &&
+             new Date(booking.endDate) >= selectedDate)
+          );
+        });
+
+        // Dapatkan room yang full booked di tanggal terpilih
+        const fullBookedRooms = getFullBookedRoomsForDay(
+          relevantBookings,
+          formData.startDate,
+          allRooms
+        );
+
+        // Filter room yang bukan full booked
+        const availableRooms = allRooms.filter(
+          (room) => !fullBookedRooms.includes(room.name)
+        );
+
+        setRooms(allRooms); // simpan semua room untuk reference
+        setFilteredRooms(availableRooms); // hanya room yang tersedia
+
       } catch (err) {
         console.error(err);
-        setError("Error fetching rooms.");
+        setError("Error fetching data.");
       } finally {
         setLoading(false);
       }
     };
-    fetchRooms();
-  }, []);
+
+    if (formData.startDate && !isWeekend(formData.startDate)) {
+      fetchRooms();
+    }
+  }, [formData.startDate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -49,7 +132,6 @@ export default function CreateBookingForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-
     try {
       if (
         !formData.roomId ||
@@ -64,7 +146,6 @@ export default function CreateBookingForm() {
       ) {
         throw new Error("All fields are required.");
       }
-
       const formattedData = {
         roomId: parseInt(formData.roomId),
         startDate: formData.startDate,
@@ -76,10 +157,7 @@ export default function CreateBookingForm() {
         description: formData.description,
         penanggungJawab: formData.penanggungJawab,
       };
-
       await api.post("/api/bookings", formattedData);
-
-      // 🔥 Tampilkan toast sukses
       toast.success("✅ Booking created successfully!", {
         position: "top-right",
         autoClose: 5000,
@@ -88,24 +166,18 @@ export default function CreateBookingForm() {
         pauseOnHover: true,
         draggable: true,
       });
-
       setTimeout(() => {
         router.push("/pages/dashboard");
-      }, 2000); // Redirect setelah 2 detik agar user bisa lihat toast
-
+      }, 2000);
     } catch (err) {
       console.error(err);
       let errorMessage = "Error creating booking. Please try again.";
-
       if (err.response && err.response.data && err.response.data.message) {
         errorMessage = err.response.data.message;
       } else if (err.message) {
         errorMessage = err.message;
       }
-
       setError(errorMessage);
-
-      // 🔥 Tampilkan toast error jika gagal
       toast.error("❌ Failed to create booking.", {
         autoClose: 5000,
       });
@@ -145,7 +217,7 @@ export default function CreateBookingForm() {
                     required
                   >
                     <option value="">Select a room</option>
-                    {rooms.map((room) => (
+                    {filteredRooms.map((room) => (
                       <option key={room.id} value={room.id}>
                         {room.name}
                       </option>
@@ -295,8 +367,6 @@ export default function CreateBookingForm() {
           </div>
         </div>
       </div>
-
-      {/* 🔥 Tempatkan ToastContainer di akhir agar toast bisa tampil */}
       <ToastContainer />
     </div>
   );
