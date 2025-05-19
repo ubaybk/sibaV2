@@ -362,13 +362,14 @@ export default function Dashboard() {
 
 {hasFullBookedRooms && (
   (() => {
-    // DETEKSI ROOM ZOOM MEETING BERDASARKAN NAMA
+    // Deteksi Zoom Meeting berdasarkan nama
     const zoomRooms = rooms.filter(r => r.name === 'ZOOM MEETING');
     const zoomFullBooked = fullBookedRooms.filter(roomName =>
       zoomRooms.some(zr => zr.name === roomName)
     );
     const isZoomFull = zoomRooms.length > 0 && zoomFullBooked.length === zoomRooms.length;
 
+    // Room non-ZOOM
     const nonZoomRooms = rooms.filter(r => r.name !== 'ZOOM MEETING');
     const nonZoomFullBooked = fullBookedRooms.filter(roomName =>
       nonZoomRooms.some(nr => nr.name === roomName)
@@ -381,6 +382,7 @@ export default function Dashboard() {
       mainMessage = 'Fully booked';
     } else if (isZoomFull) {
       mainMessage = 'Zoom Meeting Full Booked';
+      bgColorClass = 'bg-red-100 text-red-700';
     } else if (nonZoomRooms.length - nonZoomFullBooked.length === 1) {
       mainMessage = '1 room left';
       bgColorClass = 'bg-yellow-100 text-yellow-700';
