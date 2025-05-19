@@ -342,40 +342,37 @@ export default function Dashboard() {
                       )} */}
                       
                       {/* Show fullbooked indicator */}
-   {hasFullBookedRooms && (
+ {hasFullBookedRooms && (
   (() => {
-    // Hitung jumlah ruang selain ZOOM MEETING
-    const nonZoomRooms = rooms.filter(r => r.type !== 'ZOOM MEETING');
-    const nonZoomFullBooked = fullBookedRooms.filter(roomName =>
-      rooms.some(r => r.name === roomName && r.type !== 'ZOOM MEETING')
-    );
-
-    // Hitung apakah semua ZOOM MEETING sudah full
+    // Filter room dan full booked berdasarkan tipe
     const zoomRooms = rooms.filter(r => r.type === 'ZOOM MEETING');
     const zoomFullBooked = fullBookedRooms.filter(roomName =>
-      zoomRooms.some(r => r.name === roomName)
+      zoomRooms.some(zr => zr.name === roomName)
     );
-    const isZoomFull = zoomRooms.length > 0 && zoomFullBooked.length === zoomRooms.length;
 
-    // Tentukan status pesan utama
+    const isZoomFull = zoomRooms.length > 0 && zoomFullBooked.length === zoomRooms.length;
+    const nonZoomRooms = rooms.filter(r => r.type !== 'ZOOM MEETING');
+    const nonZoomFullBooked = fullBookedRooms.filter(roomName =>
+      nonZoomRooms.some(nr => nr.name === roomName)
+    );
+
     let mainMessage = '';
     let bgColorClass = 'bg-red-100 text-red-700';
 
     if (fullBookedRooms.length === rooms.length) {
       mainMessage = 'Fully booked';
-      bgColorClass = 'bg-red-100 text-red-700';
+    } else if (isZoomFull) {
+      mainMessage = 'Zoom Meeting Full Booked';
     } else if (nonZoomRooms.length - nonZoomFullBooked.length === 1) {
       mainMessage = '1 room left';
       bgColorClass = 'bg-yellow-100 text-yellow-700';
     } else {
-      mainMessage = `${fullBookedRooms.length} fullbooked`;
-      bgColorClass = 'bg-red-100 text-red-700';
+      mainMessage = `${nonZoomFullBooked.length} fullbooked`;
     }
 
     return (
       <div className={`mt-1 text-xs px-1 py-0.5 rounded ${bgColorClass}`}>
         {mainMessage}
-        {isZoomFull && <span className="ml-1 font-semibold">- Zoom Meeting Full Booked</span>}
       </div>
     );
   })()
