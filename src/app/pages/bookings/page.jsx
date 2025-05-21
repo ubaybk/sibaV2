@@ -73,42 +73,44 @@ export default function Bookings() {
   if (loading) return <p>Loading...</p>;
 
   return (
-    <div>
-      <Navbar className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white shadow-lg" />
-      <div className="container mx-auto p-4 bg-white">
-        <h1 className="text-3xl font-bold text-indigo-600 mb-6">Bookings</h1>
+  <div className="flex flex-col min-h-screen">
+    {/* Konten Utama */}
+    <div className="container mx-auto p-4 bg-white flex-grow flex flex-col">
+      <h1 className="text-3xl font-bold text-indigo-600 mb-6">Bookings</h1>
 
-        {/* Tabs */}
-        <div className="flex space-x-4 mb-6">
-          <button
-            onClick={() => setActiveTab("upcoming")}
-            className={`px-4 py-2 rounded-lg font-semibold ${
-              activeTab === "upcoming"
-                ? "bg-indigo-600 text-white"
-                : "bg-gray-100 text-gray-800"
-            }`}
-          >
-            Acara Akan Datang
-          </button>
-          <button
-            onClick={() => setActiveTab("past")}
-            className={`px-4 py-2 rounded-lg font-semibold ${
-              activeTab === "past"
-                ? "bg-indigo-600 text-white"
-                : "bg-gray-100 text-gray-800"
-            }`}
-          >
-            Acara Selesai
-          </button>
-        </div>
+      {/* Tabs */}
+      <div className="flex space-x-4 mb-6">
+        <button
+          onClick={() => setActiveTab("upcoming")}
+          className={`px-4 py-2 rounded-lg font-semibold ${
+            activeTab === "upcoming"
+              ? "bg-indigo-600 text-white"
+              : "bg-gray-100 text-gray-800"
+          }`}
+        >
+          Acara Akan Datang
+        </button>
+        <button
+          onClick={() => setActiveTab("past")}
+          className={`px-4 py-2 rounded-lg font-semibold ${
+            activeTab === "past"
+              ? "bg-indigo-600 text-white"
+              : "bg-gray-100 text-gray-800"
+          }`}
+        >
+          Acara Selesai
+        </button>
+      </div>
 
-        {/* Content */}
+      {/* Content */}
+      <div className="flex-grow flex items-center justify-center">
         {filteredBookings.length === 0 ? (
           <p className="text-gray-500 text-center">
-            Tidak ada booking {activeTab === "upcoming" ? "akan datang" : "yang sudah selesai"}.
+            Tidak ada booking{" "}
+            {activeTab === "upcoming" ? "akan datang" : "yang sudah selesai"}.
           </p>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
             {filteredBookings.map((booking) => (
               <BookingCard key={booking.id} booking={booking} onDeleted={fetchBookings} />
             ))}
@@ -116,5 +118,11 @@ export default function Bookings() {
         )}
       </div>
     </div>
-  );
+
+    {/* Sticky Navbar - Hanya di Mobile */}
+    <Navbar
+      className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white shadow-lg"
+    />
+  </div>
+);
 }
