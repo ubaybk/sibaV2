@@ -300,7 +300,7 @@ export default function Dashboard() {
                   }
                   
                   if (isSelected) {
-                    dayClass += "bg-purple-50 shadow-md transform scale-[1.02] ";
+                   dayClass += "bg-purple-50 shadow-md transform scale-[1.02] border-2 border-yellow-400 ";
                   } else {
                     dayClass += "bg-white hover:bg-purple-50 ";
                   }
