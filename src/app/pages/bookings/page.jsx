@@ -73,7 +73,7 @@ export default function Bookings() {
   if (loading) return <p>Loading...</p>;
 
   return (
-    <div>
+    <div className="bg-white">
       <Navbar />
       <div className="container mx-auto p-4 bg-white">
         <h1 className="text-3xl font-bold text-indigo-600 mb-6">Bookings</h1>
