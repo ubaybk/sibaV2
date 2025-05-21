@@ -74,7 +74,7 @@ export default function Bookings() {
 
   return (
     <div>
-      <Navbar />
+      <Navbar className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white shadow-lg" />
       <div className="container mx-auto p-4 bg-white">
         <h1 className="text-3xl font-bold text-indigo-600 mb-6">Bookings</h1>
 
