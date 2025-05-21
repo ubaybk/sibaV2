@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { api } from "../../../../utils/api";
 import Navbar from "../../../components/navbar";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function BookingDetail() {
   const params = useParams();
@@ -19,7 +21,7 @@ export default function BookingDetail() {
     participantCount: "",
     eventName: "",
     description: "",
-    penanggungJawab: ""
+    penanggungJawab: "",
   });
   const [rooms, setRooms] = useState([]); // Daftar ruangan
   const [error, setError] = useState("");
@@ -35,24 +37,26 @@ export default function BookingDetail() {
 
         // Validasi data sebelum menggunakannya
         if (!bookingData.startDate || !bookingData.endDate) {
-          throw new Error("Start date or end date is missing in the API response.");
+          throw new Error(
+            "Start date or end date is missing in the API response."
+          );
         }
 
         setBooking(bookingData);
         setFormData({
           roomId: bookingData.roomId.toString(), // Pastikan roomId adalah string
           startDate: bookingData.startDate.split("T")[0], // Format YYYY-MM-DD
-          endDate: bookingData.endDate.split("T")[0],     // Format YYYY-MM-DD
+          endDate: bookingData.endDate.split("T")[0], // Format YYYY-MM-DD
           startTime: bookingData.startTime,
           endTime: bookingData.endTime,
           participantCount: bookingData.participantCount.toString(),
           eventName: bookingData.eventName,
           description: bookingData.description,
-          penanggungJawab: bookingData.penanggungJawab
+          penanggungJawab: bookingData.penanggungJawab,
         });
       } catch (err) {
-        console.error("API Error:", err); // Debugging
-        setError("Error fetching booking details.");
+        console.error("API Error:", err);
+        toast.error("Error fetching booking details.");
       }
     };
 
@@ -99,15 +103,15 @@ export default function BookingDetail() {
       await api.put(`/api/bookings/${id}`, formData);
       router.push("/pages/bookings");
     } catch (err) {
-      console.error("Update Error:", err); // Debugging
+  console.error("Update Error:", err);
 
-      // Tangkap pesan error dari backend
-      if (err.response && err.response.data && err.response.data.message) {
-        setError(err.response.data.message); // Tampilkan pesan error spesifik
-      } else {
-        setError("Error updating booking."); // Tampilkan pesan error umum
-      }
-    }
+  if (err.response && err.response.data && err.response.data.message) {
+    toast.error(err.response.data.message);
+  } else {
+    toast.error("Error updating booking.");
+  }
+}
+
   };
 
   if (!booking) return <p>Loading...</p>;
@@ -116,7 +120,9 @@ export default function BookingDetail() {
     <div>
       <Navbar />
       <div className="container mx-auto p-4">
-        <h1 className="text-3xl font-bold text-indigo-600 mb-6">Edit Booking</h1>
+        <h1 className="text-3xl font-bold text-indigo-600 mb-6">
+          Edit Booking
+        </h1>
 
         {/* Menampilkan pesan error */}
         {error && <p className="text-red-500">{error}</p>}
@@ -124,7 +130,9 @@ export default function BookingDetail() {
         <form onSubmit={handleUpdate} className="space-y-4">
           {/* Dropdown Room Name */}
           <div>
-            <label className="block text-sm font-medium text-gray-700">Room Name</label>
+            <label className="block text-sm font-medium text-gray-700">
+              Room Name
+            </label>
             <select
               name="roomId"
               value={formData.roomId}
@@ -143,7 +151,9 @@ export default function BookingDetail() {
 
           {/* Input fields lainnya */}
           <div>
-            <label className="block text-sm font-medium text-gray-700">Start Date</label>
+            <label className="block text-sm font-medium text-gray-700">
+              Start Date
+            </label>
             <input
               type="date"
               name="startDate"
@@ -154,7 +164,9 @@ export default function BookingDetail() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">End Date</label>
+            <label className="block text-sm font-medium text-gray-700">
+              End Date
+            </label>
             <input
               type="date"
               name="endDate"
@@ -165,7 +177,9 @@ export default function BookingDetail() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">Start Time</label>
+            <label className="block text-sm font-medium text-gray-700">
+              Start Time
+            </label>
             <input
               type="time"
               name="startTime"
@@ -176,7 +190,9 @@ export default function BookingDetail() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">End Time</label>
+            <label className="block text-sm font-medium text-gray-700">
+              End Time
+            </label>
             <input
               type="time"
               name="endTime"
@@ -187,7 +203,9 @@ export default function BookingDetail() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">Participant Count</label>
+            <label className="block text-sm font-medium text-gray-700">
+              Participant Count
+            </label>
             <input
               type="number"
               name="participantCount"
@@ -198,7 +216,9 @@ export default function BookingDetail() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">Event Name</label>
+            <label className="block text-sm font-medium text-gray-700">
+              Event Name
+            </label>
             <input
               type="text"
               name="eventName"
@@ -209,7 +229,9 @@ export default function BookingDetail() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">Description</label>
+            <label className="block text-sm font-medium text-gray-700">
+              Description
+            </label>
             <textarea
               name="description"
               value={formData.description}
@@ -220,7 +242,9 @@ export default function BookingDetail() {
             ></textarea>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">Penanggung Jawab</label>
+            <label className="block text-sm font-medium text-gray-700">
+              Penanggung Jawab
+            </label>
             <input
               type="text"
               name="penanggungJawab"
