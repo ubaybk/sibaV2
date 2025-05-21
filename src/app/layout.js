@@ -1,7 +1,7 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import 'react-toastify/dist/ReactToastify.css';
-import { ToastContainer } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
 import Footer from "./components/footer";
 
 const geistSans = Geist({
@@ -18,7 +18,8 @@ export const metadata = {
   title: "SIBA V2",
   description: "Sistem Booking Aula Cilandak",
   icons: {
-    icon: '/logoSibaV2.ico', type: "image/x-icon" // pastikan file ini ada di public/
+    icon: "/logoSibaV2.ico",
+    type: "image/x-icon", // pastikan file ini ada di public/
   },
 };
 
@@ -26,10 +27,11 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
       >
-        {children}
-        <Footer/>
+        <div className="flex-grow">{children}</div>
+        <Footer />
+        <ToastContainer />
       </body>
     </html>
   );
