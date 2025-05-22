@@ -13,7 +13,7 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false); // State untuk toggle password
   const router = useRouter();
 
-  const handleSubmit = async (e) => {
+const handleSubmit = async (e) => {
   e.preventDefault();
   setError("");
 
@@ -28,10 +28,13 @@ export default function Login() {
     localStorage.setItem("token", response.data.token);
     localStorage.setItem("user", JSON.stringify(response.data.user));
 
-    toast.success("Login berhasil!");
-    setTimeout(() => {
-      router.push("/pages/dashboard");
-    }, 1000); // Delay agar toast terlihat sebelum redirect
+    // Tampilkan toast sukses
+    toast.success("Login berhasil!", {
+      autoClose: 1000,
+      onClose: () => {
+        router.push("/pages/dashboard"); // Redirect setelah toast ditutup
+      }
+    });
 
   } catch (err) {
     console.error("Error login:", err);
