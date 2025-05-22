@@ -3,6 +3,8 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { IoArrowBackCircleSharp, IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 import { api } from "../../../utils/api";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -12,37 +14,44 @@ export default function Login() {
   const router = useRouter();
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
+  e.preventDefault();
+  setError("");
 
-    try {
-      const response = await api.post("/api/auth/login", { email, password });
+  try {
+    const response = await api.post("/api/auth/login", { email, password });
 
-      if (!response.data || !response.data.token) {
-        setError("Token tidak diterima dari server");
-        return;
-      }
-
-      localStorage.setItem("token", response.data.token);
-      localStorage.setItem("user", JSON.stringify(response.data.user));
-
-      router.push("/pages/dashboard");
-
-    } catch (err) {
-      console.error("Error login:", err);
-
-      if (err.response?.data?.message) {
-        setError(err.response.data.message);
-      } else if (err.request) {
-        setError("Server tidak merespons. Cek backend.");
-      } else {
-        setError("Terjadi kesalahan saat login.");
-      }
+    if (!response.data || !response.data.token) {
+      toast.error("Token tidak diterima dari server");
+      return;
     }
-  };
+
+    localStorage.setItem("token", response.data.token);
+    localStorage.setItem("user", JSON.stringify(response.data.user));
+
+    toast.success("Login berhasil!");
+    setTimeout(() => {
+      router.push("/pages/dashboard");
+    }, 1000); // Delay agar toast terlihat sebelum redirect
+
+  } catch (err) {
+    console.error("Error login:", err);
+
+    let errorMessage = "Terjadi kesalahan saat login.";
+
+    if (err.response?.data?.message) {
+      errorMessage = err.response.data.message;
+    } else if (err.request) {
+      errorMessage = "Server tidak merespons. Cek backend.";
+    }
+
+    setError(errorMessage);
+    toast.error(errorMessage);
+  }
+};
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-purple-600 px-4">
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} />
       
       {/* Tombol Back */}
       <button
