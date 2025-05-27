@@ -173,7 +173,7 @@ export default function CreateBookingForm() {
         const { eventName, startDate, endDate, startTime, endTime, penanggungJawab } = formData;
 
         const message = `Assalamualaikum Admin, Booking ZOOM MEETING %0A %0AEvent Name: ${eventName}%0AStart Date: ${startDate}%0AEnd Date: ${endDate}%0AStart Time: ${startTime}%0AEnd Time: ${endTime}%0APenanggung Jawab: ${penanggungJawab}`;
-        const whatsappURL = `https://wa.me/628388399207?text= ${message}`;
+        const whatsappURL = `https://wa.me/6285771736517?text= ${message}`;
 
         window.open(whatsappURL, '_blank');
       }
