@@ -4,7 +4,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { api } from "../../utils/api";
 import Navbar from "./navbar";
 import { toast, ToastContainer } from "react-toastify";
-import { isSameDay, eachDayOfInterval } from 'date-fns';
+import { isSameDay } from 'date-fns';
 import "react-toastify/dist/ReactToastify.css";
 
 export default function CreateBookingForm() {
@@ -36,7 +36,6 @@ export default function CreateBookingForm() {
   // Fungsi untuk menghitung durasi booking per ruangan
   const getFullBookedRoomsForDay = (bookings, day, allRooms) => {
     if (!bookings || !Array.isArray(bookings)) return [];
-
     const dayBookings = bookings.filter((booking) => {
       const bookingDates = getDatesInRange(booking.startDate, booking.endDate);
       return bookingDates.some((d) => isSameDay(d, new Date(day)));
@@ -65,12 +64,10 @@ export default function CreateBookingForm() {
     const end = new Date(endDate);
     const dates = [];
     let currentDate = start;
-
     while (currentDate <= end) {
       dates.push(new Date(currentDate));
       currentDate.setDate(currentDate.getDate() + 1);
     }
-
     return dates;
   };
 
@@ -81,7 +78,6 @@ export default function CreateBookingForm() {
         setLoading(true);
         const response = await api.get("/api/bookings");
         const allBookings = response.data || [];
-
         const roomsResponse = await api.get("/api/rooms/");
         const allRooms = roomsResponse.data.rooms || [];
 
@@ -111,7 +107,6 @@ export default function CreateBookingForm() {
 
         setRooms(allRooms); // simpan semua room untuk reference
         setFilteredRooms(availableRooms); // hanya room yang tersedia
-
       } catch (err) {
         console.error(err);
         setError("Error fetching data.");
@@ -119,7 +114,6 @@ export default function CreateBookingForm() {
         setLoading(false);
       }
     };
-
     if (formData.startDate && !isWeekend(formData.startDate)) {
       fetchRooms();
     }
@@ -147,6 +141,7 @@ export default function CreateBookingForm() {
       ) {
         throw new Error("All fields are required.");
       }
+
       const formattedData = {
         roomId: parseInt(formData.roomId),
         startDate: formData.startDate,
@@ -158,7 +153,9 @@ export default function CreateBookingForm() {
         description: formData.description,
         penanggungJawab: formData.penanggungJawab,
       };
+
       await api.post("/api/bookings", formattedData);
+
       toast.success("✅ Booking created successfully!", {
         position: "top-right",
         autoClose: 5000,
@@ -167,9 +164,24 @@ export default function CreateBookingForm() {
         pauseOnHover: true,
         draggable: true,
       });
+
+      // 🔥 TAMBAHAN LOGIKA JIKA ROOM NAME ADALAH "ZOOM MEETING"
+      const selectedRoom = rooms.find((room) => room.id === parseInt(formData.roomId));
+      const isZoomMeeting = selectedRoom?.name === "ZOOM MEETING";
+
+      if (isZoomMeeting) {
+        const { eventName, startDate, endDate, startTime, endTime, penanggungJawab } = formData;
+
+        const message = `Event Name: ${eventName}%0AStart Date: ${startDate}%0AEnd Date: ${endDate}%0AStart Time: ${startTime}%0AEnd Time: ${endTime}%0APenanggung Jawab: ${penanggungJawab}`;
+        const whatsappURL = `https://wa.me/08388399207?text= ${message}`;
+
+        window.open(whatsappURL, '_blank');
+      }
+
       setTimeout(() => {
         router.push("/pages/dashboard");
       }, 2000);
+
     } catch (err) {
       console.error(err);
       let errorMessage = "Error creating booking. Please try again.";
