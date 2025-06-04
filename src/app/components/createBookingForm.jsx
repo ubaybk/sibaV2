@@ -229,7 +229,7 @@ export default function CreateBookingForm() {
                     className="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200"
                     required
                   >
-                    <option value="">Select a room</option>
+                    <option className="text-gray-300" value="">Select a room</option>
                     {filteredRooms.map((room) => (
                       <option key={room.id} value={room.id}>
                         {room.name}
@@ -246,7 +246,7 @@ export default function CreateBookingForm() {
                     onChange={handleChange}
                     className="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 text-black"
                     placeholder="Enter number of participants"
-                    style={{ colorScheme: '#9ca3af' }}
+                    style={{ colorScheme: '#d1d5db' }}
                     required
                   />
                 </div>
@@ -261,7 +261,7 @@ export default function CreateBookingForm() {
                     name="startDate"
                     value={formData.startDate}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 md:text-black"
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 text-black"
                     required
                   />
                 </div>
@@ -272,7 +272,7 @@ export default function CreateBookingForm() {
                     name="endDate"
                     value={formData.endDate}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200"
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 text-black"
                     required
                   />
                 </div>
@@ -287,7 +287,7 @@ export default function CreateBookingForm() {
                     name="startTime"
                     value={formData.startTime}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200"
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 text-black"
                     required
                   />
                 </div>
@@ -298,7 +298,7 @@ export default function CreateBookingForm() {
                     name="endTime"
                     value={formData.endTime}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200"
+                    className="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 text-black"
                     required
                   />
                 </div>
@@ -312,8 +312,9 @@ export default function CreateBookingForm() {
                   name="eventName"
                   value={formData.eventName}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200"
+                  className="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 text-black"
                   placeholder="Enter event name"
+                   style={{ colorScheme: '#d1d5db' }}
                   required
                 />
               </div>
@@ -325,9 +326,10 @@ export default function CreateBookingForm() {
                   name="description"
                   value={formData.description}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200"
+                  className="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 text-black"
                   rows="4"
                   placeholder="Enter event description"
+                   style={{ colorScheme: '#d1d5db' }}
                   required
                 ></textarea>
               </div>
@@ -340,8 +342,9 @@ export default function CreateBookingForm() {
                   name="penanggungJawab"
                   value={formData.penanggungJawab}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200"
+                  className="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 text-black"
                   placeholder="Enter person in charge"
+                   style={{ colorScheme: '#d1d5db' }}
                   required
                 />
               </div>
