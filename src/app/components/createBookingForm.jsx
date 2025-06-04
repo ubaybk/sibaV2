@@ -229,7 +229,7 @@ export default function CreateBookingForm() {
                     className="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200"
                     required
                   >
-                    <option className="text-gray-400" value="">Select a room</option>
+                    <option className="text-[#d1d5db]" value="">Select a room</option>
                     {filteredRooms.map((room) => (
                       <option key={room.id} value={room.id}>
                         {room.name}
