@@ -244,7 +244,7 @@ export default function CreateBookingForm() {
                     name="participantCount"
                     value={formData.participantCount}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200  sm:text-black"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200  sm:text-black"
                     placeholder="Enter number of participants"
                     required
                   />
