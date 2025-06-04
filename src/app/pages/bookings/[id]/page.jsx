@@ -119,7 +119,7 @@ export default function BookingDetail() {
   return (
     <div>
       <Navbar />
-      <div className="container mx-auto p-4">
+      <div className="container bg-white mx-auto p-4">
         <h1 className="text-3xl font-bold text-indigo-600 mb-6">
           Edit Booking
         </h1>
