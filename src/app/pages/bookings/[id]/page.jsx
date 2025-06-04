@@ -137,7 +137,7 @@ export default function BookingDetail() {
               name="roomId"
               value={formData.roomId}
               onChange={handleChange}
-              className="w-full px-3 py-2 mt-1 border rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+              className="w-full px-3 py-2 mt-1 border rounded-md focus:ring-indigo-500 focus:border-indigo-500 text-black"
               required
             >
               <option value="">Select a room</option>
@@ -159,7 +159,7 @@ export default function BookingDetail() {
               name="startDate"
               value={formData.startDate}
               onChange={handleChange}
-              className="w-full px-3 py-2 mt-1 border rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+              className="w-full px-3 py-2 mt-1 border rounded-md focus:ring-indigo-500 focus:border-indigo-500 text-black"
               required
             />
           </div>
@@ -172,7 +172,7 @@ export default function BookingDetail() {
               name="endDate"
               value={formData.endDate}
               onChange={handleChange}
-              className="w-full px-3 py-2 mt-1 border rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+              className="w-full px-3 py-2 mt-1 border rounded-md focus:ring-indigo-500 focus:border-indigo-500 text-black"
               required
             />
           </div>
@@ -185,7 +185,7 @@ export default function BookingDetail() {
               name="startTime"
               value={formData.startTime}
               onChange={handleChange}
-              className="w-full px-3 py-2 mt-1 border rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+              className="w-full px-3 py-2 mt-1 border rounded-md focus:ring-indigo-500 focus:border-indigo-500 text-black"
               required
             />
           </div>
@@ -198,7 +198,7 @@ export default function BookingDetail() {
               name="endTime"
               value={formData.endTime}
               onChange={handleChange}
-              className="w-full px-3 py-2 mt-1 border rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+              className="w-full px-3 py-2 mt-1 border rounded-md focus:ring-indigo-500 focus:border-indigo-500 text-black"
               required
             />
           </div>
@@ -211,7 +211,7 @@ export default function BookingDetail() {
               name="participantCount"
               value={formData.participantCount}
               onChange={handleChange}
-              className="w-full px-3 py-2 mt-1 border rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+              className="w-full px-3 py-2 mt-1 border rounded-md focus:ring-indigo-500 focus:border-indigo-500 text-black"
               required
             />
           </div>
@@ -224,7 +224,7 @@ export default function BookingDetail() {
               name="eventName"
               value={formData.eventName}
               onChange={handleChange}
-              className="w-full px-3 py-2 mt-1 border rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+              className="w-full px-3 py-2 mt-1 border rounded-md focus:ring-indigo-500 focus:border-indigo-500 text-black"
               required
             />
           </div>
@@ -236,7 +236,7 @@ export default function BookingDetail() {
               name="description"
               value={formData.description}
               onChange={handleChange}
-              className="w-full px-3 py-2 mt-1 border rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+              className="w-full px-3 py-2 mt-1 border rounded-md focus:ring-indigo-500 focus:border-indigo-500 text-black"
               rows="3"
               required
             ></textarea>
@@ -250,7 +250,7 @@ export default function BookingDetail() {
               name="penanggungJawab"
               value={formData.penanggungJawab}
               onChange={handleChange}
-              className="w-full px-3 py-2 mt-1 border rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+              className="w-full px-3 py-2 mt-1 border rounded-md focus:ring-indigo-500 focus:border-indigo-500 text-black"
               required
             />
           </div>
